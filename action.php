@@ -23,7 +23,7 @@ if (!empty($employeeID)) {
   $myhrsQuery .= " AND ar.employee_id = '$employeeID'";
 }
 
-$myhrsQuery .= " GROUP BY ar.punch_out_utc_time";
+$myhrsQuery .= " GROUP BY ar.punch_out_utc_time ORDER BY ar.employee_id ASC";
 
 $empResult = mysqli_query($conn, $myhrsQuery);
 

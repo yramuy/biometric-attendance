@@ -125,10 +125,37 @@ $count = mysqli_num_rows($empResult);
 
 </html>
 <script>
+  let tr = '<tr><td colspan="7"><center><h4>No data found!</h4></center></td></tr>';
+  $('#summaryTable tbody').append(tr);
   function handleOnchange(emp, date) {
     var empVal = $('#employee').val();
     var dateVal = $('#date').val();
     $('#summaryTable tbody').html('');
+
+    // Get current date
+    var today = new Date();
+
+    // Format the date as YYYY-MM-DD
+    var formattedDate = today.getFullYear() + '-' +
+      ('0' + (today.getMonth() + 1)).slice(-2) + '-' +
+      ('0' + today.getDate()).slice(-2);
+
+    // Output the date
+    if (dateVal >= formattedDate) {
+      alert('Do not choose a current or future date.');
+      $('#date').val('');
+      $('#employee').val('');
+      $('#summaryTable tbody').append(tr);
+      return false;
+    }
+
+    if (dateVal == '') {
+      alert('Please select a date');
+      $('#employee').val('');
+      $('#date').val('');
+      $('#summaryTable tbody').append(tr);
+      return false;
+    }
 
     if (empVal != "" || dateVal != "") {
       $.ajax({
@@ -141,7 +168,13 @@ $count = mysqli_num_rows($empResult);
         // dataType: 'json',
         success: function(response) {
           // var decodeHtml = JSON.parse(response);
-          $('#summaryTable tbody').append(response);
+          console.log(response)
+          if(response != ""){
+            $('#summaryTable tbody').append(response);
+          } else {
+            $('#summaryTable tbody').append(tr);
+          }
+          
           console.log(response)
         }
       });
